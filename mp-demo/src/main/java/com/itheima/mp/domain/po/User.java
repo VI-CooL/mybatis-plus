@@ -59,4 +59,19 @@ public class User {
      * 更新时间
      */
     private LocalDateTime updateTime;
+
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "id=" + id +
+//                ", username='" + username + '\'' +
+//                ", password='" + password + '\'' +
+//                ", phone='" + phone + '\'' +
+//                ", info='" + info + '\'' +
+//                ", status=" + status +
+//                ", balance=" + balance +
+//                ", createTime=" + createTime +
+//                ", updateTime=" + updateTime +
+//                '}';
+//    }
 }

@@ -1,5 +1,6 @@
 package com.itheima.mp.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.itheima.mp.domain.po.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ class UserMapperTest {
 
     @Test
     void testSelectById() {
-        User user = userMapper.selectById(5L);
+        User user = userMapper.selectById(6L);
         System.out.println("user = " + user);
     }
 
@@ -60,4 +61,31 @@ class UserMapperTest {
     void testDeleteUser() {
         userMapper.deleteById(5L);
     }
+
+    /***
+     * @Description: 查询出名字中带o的，存款大于等于1000元的人的id、username、info、balance字段
+     * @Param: []
+     * @return: void
+     * @Author: VICooL
+     * @Date: 2023/12/25
+     */
+    @Test
+    void testQueryWrapper(){
+        // 1.构造查询条件
+        QueryWrapper<User> wrapper = new QueryWrapper<User>()
+                .select("id", "username", "info", "balance")
+                .like("username", "o")
+                .ge("balance", 1000);
+        // 查询
+        List<User> users = userMapper.selectList(wrapper);
+        users.forEach(System.out::println);
+
+
+    }
+
+
+
+
+
+
 }
