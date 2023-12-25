@@ -79,9 +79,27 @@ class UserMapperTest {
         // 查询
         List<User> users = userMapper.selectList(wrapper);
         users.forEach(System.out::println);
-
-
     }
+
+    /**
+     * @Description: 更新用户名为jack的用户的余额为2000
+     * @Param: []
+     * @return: void
+     * @Author: VICooL
+     */
+    @Test
+    void testUpdateByQueryWrapper(){
+        // 1.要更新的数据
+        User user = new User();
+        user.setBalance(2000);
+        // 2.更新的条件
+        QueryWrapper<User> wrapper = new QueryWrapper<User>()
+                .eq("username","jack");
+        // 3.执行更新
+        userMapper.update(user,wrapper);
+    }
+
+
 
 
 
