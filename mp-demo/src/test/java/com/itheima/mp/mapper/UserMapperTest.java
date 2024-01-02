@@ -91,13 +91,33 @@ class UserMapperTest {
     void testUpdateByQueryWrapper(){
         // 1.要更新的数据
         User user = new User();
-        user.setBalance(2000);
+        user.setBalance (2000);
         // 2.更新的条件
         QueryWrapper<User> wrapper = new QueryWrapper<User>()
                 .eq("username","jack");
         // 3.执行更新
         userMapper.update(user,wrapper);
     }
+
+    /**
+     * @Description: 更新id为1,2,4的用户的余额,扣200
+     * @Param: []
+     * @return: void
+     * @Author: VICooL
+     */
+    @Test
+    void testUpdateWrapper(){
+        // 1.要更新的数据
+        User user = new User();
+        user.setBalance (2000);
+        // 2.更新的条件
+        QueryWrapper<User> wrapper = new QueryWrapper<User>()
+                .eq("username","jack");
+        // 3.执行更新
+        userMapper.update(user,wrapper);
+    }
+
+
 
 
 
