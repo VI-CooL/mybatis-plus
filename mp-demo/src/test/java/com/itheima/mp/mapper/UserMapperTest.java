@@ -107,6 +107,21 @@ class UserMapperTest {
     }
 
     /**
+     * @Description: 更新id为1的用户的余额为6666
+     * @Param: []
+     * @return: void
+     * @Author: VICooL
+     */
+    @Test
+    void testUpdate() {
+        // 1.要更新的数据
+        User user = new User();
+        user.setId(1L);
+        user.setBalance(6666);
+        userService.updateUser(user);
+    }
+
+    /**
      * @Description: 更新id为1, 2, 4的用户的余额, 扣200
      * @Param: []
      * @return: void
@@ -233,7 +248,7 @@ class UserMapperTest {
         userList.add(user);
         userList.add(user1);
 
-        userService.addGroupTagRelDefLst(userList);
+        userService.saveOrUpdateUserLst(userList);
 
     }
     
@@ -263,10 +278,20 @@ class UserMapperTest {
         user.setUpdateTime(LocalDateTime.now());
         List<User> userList = new ArrayList<>();
         userList.add(user);
-        userService.addGroupTagRelDefLst(userList);
+        userService.saveOrUpdateUserLst(userList);
     }
 
 
+    @Test
+    void testDelete() {
+        List<Integer> ids = Arrays.asList(12,13,14);
+        userService.deleteTest(ids);
+    }
 
+    @Test
+    void testTestSelect() {
+        List<Integer> ids = Arrays.asList(7,8,9);
+        userService.testSelect(ids);
+    }
 
 }

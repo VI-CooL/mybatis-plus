@@ -11,5 +11,11 @@ public interface UserService extends IService<User> {
 
     void deleteUserLstByIds(Collection<Integer> ids);
 
-    void addGroupTagRelDefLst(List<User> userLst);
+    void saveOrUpdateUserLst(List<User> userLst);
+
+    void updateUser(User user);
+
+    void deleteTest(List<Integer> ids);
+
+    List<User> testSelect(List<Integer> ids);
 }
