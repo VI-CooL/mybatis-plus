@@ -4,11 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.itheima.mp.domain.po.User;
+import com.itheima.mp.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,13 +19,15 @@ import java.util.List;
 class UserMapperTest {
 
     @Autowired
-    private UserMapper userMapper;
+    private  UserMapper userMapper;
 
+    @Autowired
+    private  UserService userService;
     @Test
     void testInsert() {
         User user = new User();
         // user.setId(5L);
-        user.setUsername("Taka");
+        user.setUsername("Tour");
         user.setPassword("123");
         user.setPhone("18688990012");
         user.setBalance(200);
@@ -155,7 +160,112 @@ class UserMapperTest {
                 .in(User::getId, ids);
         // 3.调用自定义SQL方法
         userMapper.customerSqlUpdate(wrapper, amount);
+
     }
+
+
+
+    /**
+     * @Description: @TableLogic(value = "0", delval = "1")  isDelete 字段加 TableLogic 注解
+     *               测试 BaseMapper delete 方法是否是逻辑删除
+     * @Param: []
+     * @return: void
+     * @Author: VICooL
+     * @Date: 2024/1/11
+     * summary: baseMapper.delete(Wrappers.lambdaQuery(User.class).eq(User::getId,id));  是逻辑删除
+     */
+    @Test
+    void testBaseMapperDelete01(){
+        Integer id = 8;
+        userService.deleteUserById(8);
+    }
+
+    
+    /**
+     * @Description:  @TableLogic(value = "0", delval = "1")  isDelete 字段加 TableLogic 注解
+     *                测试 BaseMapper delete 方法是否是逻辑删除
+     * @Param: []
+     * @return: void
+     * @Author: VICooL
+     * @Date: 2024/1/11
+     * summary: baseMapper.delete(Wrappers.lambdaQuery(User.class).in(User::getId,ids)); 是逻辑删除
+     */
+    @Test
+    void testBaseMapperDelete02(){
+        List<Integer> ids = Arrays.asList(5,6,7);
+        userService.deleteUserLstByIds(ids);
+    }
+    
+    /**
+     * @Description:  @TableLogic(value = "0", delval = "1")  isDelete 字段加 TableLogic 注解
+     *                测试这个注解会不会影响 super.saveOrUpdate
+     * @Param: []
+     * @return: void
+     * @Author: VICooL
+     * @Date: 2024/1/11
+     * summary: 对增加没有影响
+     */
+    @Test
+    void testSaveOrUpdate(){
+        User user = new User();
+        //user.setId(5L);
+        user.setUsername("ryota");
+        user.setPassword("123");
+        user.setPhone("18688990012");
+        user.setBalance(200);
+        user.setInfo("{\"age\": 24, \"intro\": \"贝斯手\", \"gender\": \"female\"}");
+        user.setIsDeleted(0);
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
+
+        User user1 = new User();
+        //user.setId(5L);
+        user1.setUsername("tomoya");
+        user1.setPassword("123");
+        user1.setPhone("18688990012");
+        user1.setBalance(200);
+        user1.setInfo("{\"age\": 24, \"intro\": \"鼓手\", \"gender\": \"female\"}");
+        user1.setIsDeleted(0);
+        user1.setCreateTime(LocalDateTime.now());
+        user1.setUpdateTime(LocalDateTime.now());
+
+        List<User> userList = new ArrayList<>();
+        userList.add(user);
+        userList.add(user1);
+
+        userService.addGroupTagRelDefLst(userList);
+
+    }
+    
+    /**
+     * @Description:   @TableLogic(value = "0", delval = "1")  isDelete 字段加 TableLogic 注解
+     *                 测试这个注解会不会影响到 把删除数据的标识设置为未删除 super.saveOrUpdate
+     * @Param: []
+     * @return: void
+     * @Author: VICooL
+     * @Date: 2024/1/11
+     * summary: 对修改有影响
+     *          实际的查询（SELECT id,username,password,phone,info,status,balance,is_deleted,create_time,update_time FROM tb_user
+     *          WHERE id=? AND is_deleted=0）   他会自己加上 is_deleted = 0
+     *          如果更新数据要把已经删除变为未删除 需要自己手写sql了,因为mybatis-plus 的查询自动会加上 is_deleted = 0 的条件
+     */
+    @Test
+    void testSaveOrUpdate01() {
+        User user = new User();
+        user.setId(6L);
+        user.setUsername("JayZhou");
+        user.setPassword("123");
+        user.setPhone("18688990012");
+        user.setBalance(200);
+        user.setInfo("{\"age\": 33, \"intro\": \"歌手\", \"gender\": \"female\"}");
+        user.setIsDeleted(0);
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
+        List<User> userList = new ArrayList<>();
+        userList.add(user);
+        userService.addGroupTagRelDefLst(userList);
+    }
+
 
 
 
